@@ -1,0 +1,20 @@
+<launch>
+
+    <arg name="phasespace_url" default="cs-phasespace.cs.umn.edu" />
+
+    <node pkg="phasespace"
+          type="rigid_tracker"
+          name="phasespace_rigid_tracker"
+          ns="phasespace"
+          output="screen"
+    >
+        <param name="phasespace_url" value="$(arg phasespace_url)" />
+        <param name="tracker_filename" value="$(arg tracker_filename)" />
+    </node>
+
+    <node pkg="tf2_ros" 
+          type="static_transform_publisher" 
+          name="world_to_phasespace_pub" 
+          args="0 0 0 0 0 1.57 world phasespace 100"
+    />
+</launch>

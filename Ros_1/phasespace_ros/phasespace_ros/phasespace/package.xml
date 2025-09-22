@@ -1,0 +1,23 @@
+<package format="2">
+  <name>phasespace</name>
+
+  <version>0.1.0</version>
+
+  <description>PhaseSpace Motion Capture System</description>
+
+  <maintainer email="mishr103@umn.edu">Ritik Mishra</maintainer>
+
+  <license>BSD</license>
+
+  <author>Gregory D'Andrea</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>pkg-config</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>phasespace_msgs</depend>
+  <export></export>
+</package>
