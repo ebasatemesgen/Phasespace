@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tracker Setup | UMN PhaseSpace Guide</title>
+  <meta
+    name="description"
+    content="How to create session profiles, group LEDs, and export tracker JSON files for the PhaseSpace workflow."
+  >
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body data-page="trackers">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="PhaseSpace UMN Home">
+        <img class="brand-mark" src="phasespace-umn-mark.svg" alt="">
+        <span class="brand-name">PhaseSpace UMN</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../index.html" data-page-link="home">Home</a>
+        <a href="start-here.html" data-page-link="start">Start Here</a>
+        <a href="tracker-setup.html" data-page-link="trackers">Trackers</a>
+        <a href="ros-workflow.html" data-page-link="ros">ROS Workflow</a>
+        <a href="calibration.html" data-page-link="calibration">Calibration</a>
+        <a class="nav-code" href="https://github.com/ebasatemesgen/Phasespace">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero reveal">
+        <div class="page-hero-copy">
+          <p class="eyebrow">Tracker hardware and setup</p>
+          <h1>Build a rigid tracker the system can identify reliably.</h1>
+          <p class="lead">
+            This is where your physical hardware becomes a usable tracked object. The LED layout,
+            the session profile, and the exported JSON are all part of the same handoff from room
+            setup into the ROS workflow.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="ros-workflow.html">Next: use ROS</a>
+            <a class="button button-secondary" href="../extras/mnri-phasespace/Phasespace step-by-step guide.pdf">Open guide PDF</a>
+          </div>
+        </div>
+
+        <div class="tracker-showcase">
+          <figure class="tracker-main image-card">
+            <img src="../the_led_for_tracker.jpg" alt="LED harness used for a PhaseSpace tracker">
+            <figcaption>The LED harness is what the cameras actually see and reconstruct.</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="../tracker_image.jpg" alt="Example tracker hardware body">
+            <figcaption>The tracker body and label help keep physical hardware and exported files aligned.</figcaption>
+          </figure>
+          <div class="hero-note">
+            <strong>One tracker = hardware + LED geometry + saved JSON definition.</strong>
+            <span>
+              If any one of those pieces is wrong, the rigid-body estimate will either fail or not
+              match the object you think you are tracking.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Tracker Hardware</p>
+          <h2>What the tracked object actually looks like</h2>
+          <p>
+            The tracker is not just a name inside software. It is a physical object with a known
+            LED arrangement that the system uses to estimate a rigid-body pose.
+          </p>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">Physical</span>
+            <h3>LED harness</h3>
+            <p>The visible LED layout is what gives PhaseSpace enough information to resolve the rigid body.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Software</span>
+            <h3>Session profile</h3>
+            <p>The session profile controls which hardware and LED groups are active in the current room setup.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Export</span>
+            <h3>Tracker JSON</h3>
+            <p>The JSON file is the saved tracker definition that later gets loaded by the ROS node.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Part 1</p>
+          <h2>Create and enable a session profile</h2>
+        </div>
+
+        <div class="step-grid">
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">1</div>
+              <h3>Confirm your microdrivers appear</h3>
+              <p>If a device is greyed out, power it on and make sure the interface can see it.</p>
+            </div>
+            <img src="../images/page-17-img-1.png" alt="LED Devices table with microdrivers">
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">2</div>
+              <h3>Create a new session profile</h3>
+              <p>Open Session Profiles, click the plus button, and create a profile for your setup.</p>
+            </div>
+            <img src="../images/page-18-img-1.png" alt="Create a new session profile">
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">3</div>
+              <h3>Name the profile clearly</h3>
+              <p>Use a name that will still make sense later when you have more than one tracked object.</p>
+            </div>
+            <img src="../images/page-19-img-1.png" alt="Naming a session profile">
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">4</div>
+              <h3>Configure LED groups</h3>
+              <p>Group the LEDs so the system knows which visible points belong together for encoding.</p>
+            </div>
+            <img src="../images/page-20-img-1.png" alt="LED group configuration dropdown">
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">5</div>
+              <h3>Pre-encode the profile</h3>
+              <p>Pre-encoding is what prepares the system to identify the tracker consistently.</p>
+            </div>
+            <img src="../images/page-21-img-1.png" alt="Pre-encode profile button in the interface">
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">6</div>
+              <h3>Enable the profile in the viewer</h3>
+              <p>Once the profile shows up and is active, you have a live tracking setup ready for export.</p>
+            </div>
+            <img src="../images/page-23-img-1.png" alt="Session profile active in the viewer">
+          </article>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Part 2</p>
+          <h2>Export the rigid-body tracker JSON in Master Client</h2>
+          <p>
+            The web interface helps manage active session profiles. Master Client is where you turn
+            those visible markers into the rigid-body tracker definition saved as JSON.
+          </p>
+        </div>
+
+        <div class="photo-grid">
+          <figure class="image-card">
+            <img src="../images/page-11-img-1.png" alt="Master Client connection screen">
+            <figcaption>Connect Master Client to the PhaseSpace server first.</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="../images/page-12-img-1.png" alt="Master Client create rigid body tracker menu">
+            <figcaption>Select the markers you want and create a rigid-body tracker.</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="../images/page-13-img-1.png" alt="Rigid body tracker alignment in Master Client">
+            <figcaption>Align the rigid body so the tracker definition matches the physical object.</figcaption>
+          </figure>
+          <figure class="image-card">
+            <img src="../images/page-14-img-1.png" alt="Saving the tracker as JSON">
+            <figcaption>Save the finished tracker as JSON. That file becomes the input to the ROS node.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="note-box">
+          <span class="chip">Important bridge</span>
+          <h3>The JSON file is the handoff between your room setup and your ROS workflow.</h3>
+          <p>
+            If the tracker JSON is wrong or missing, the ROS command might still run, but it will
+            not know how to create the rigid body you actually care about.
+          </p>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="next-grid">
+          <article class="next-card">
+            <span class="chip">Next step</span>
+            <h3>ROS Workflow</h3>
+            <p>See what the code is doing with the tracker JSON, how to run it, and what topics come out.</p>
+            <a href="ros-workflow.html">Open ROS workflow</a>
+          </article>
+          <article class="next-card">
+            <span class="chip">Need example files?</span>
+            <h3>Sample tracker JSONs</h3>
+            <p>Open the example tracker files if you want to see what the saved output looks like.</p>
+            <a href="../tw0-trackers.json">Open sample JSON</a>
+          </article>
+          <article class="next-card">
+            <span class="chip">Back up</span>
+            <h3>Room setup</h3>
+            <p>If you have not connected to the room or registered the devices yet, go back and do that first.</p>
+            <a href="start-here.html">Return to Start Here</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Page goal</strong>
+        <p>This page is about defining the tracked object clearly enough that the rest of the system can use it.</p>
+      </div>
+      <div>
+        <strong>Quick links</strong>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="start-here.html">Start Here</a>
+          <a href="ros-workflow.html">ROS Workflow</a>
+          <a href="calibration.html">Calibration</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

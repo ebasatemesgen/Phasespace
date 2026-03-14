@@ -1,0 +1,27 @@
+{
+    "trackers": [
+        {
+            "id": 1,
+            "markers": [
+                {
+                    "id": 2,
+                    "name": "2",
+                    "options": "pos=68.289,-10.8757,-15.0269"
+                },
+                {
+                    "id": 3,
+                    "name": "3",
+                    "options": "pos=15.2593,0.785112,-90.0065"
+                },
+                {
+                    "id": 5,
+                    "name": "5",
+                    "options": "pos=-83.5484,10.0906,105.034"
+                }
+            ],
+            "name": "tracker1",
+            "options": "",
+            "type": "rigid"
+        }
+    ]
+}

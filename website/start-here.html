@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start Here | UMN PhaseSpace Guide</title>
+  <meta
+    name="description"
+    content="First-time-user setup for the UMN PhaseSpace room in Shepherd Labs."
+  >
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body data-page="start">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="PhaseSpace UMN Home">
+        <img class="brand-mark" src="phasespace-umn-mark.svg" alt="">
+        <span class="brand-name">PhaseSpace UMN</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../index.html" data-page-link="home">Home</a>
+        <a href="start-here.html" data-page-link="start">Start Here</a>
+        <a href="tracker-setup.html" data-page-link="trackers">Trackers</a>
+        <a href="ros-workflow.html" data-page-link="ros">ROS Workflow</a>
+        <a href="calibration.html" data-page-link="calibration">Calibration</a>
+        <a class="nav-code" href="https://github.com/ebasatemesgen/Phasespace">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero page-hero-text-only reveal">
+        <div class="page-hero-copy">
+          <p class="eyebrow">Start Here</p>
+          <h1>Finding the room and getting the system online.</h1>
+          <p class="lead">
+            If this is your first time using the UMN PhaseSpace setup, start with the physical
+            location and the startup flow. The system is installed in Shepherd Labs, inside the
+            Drone Lab. Once you reach the room, the normal path is: power the hub, connect to the
+            local network, open the Configuration Manager, and confirm the tracking hardware shows
+            up correctly.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="tracker-setup.html">Next: tracker setup</a>
+            <a class="button button-secondary" href="../extras/mnri-phasespace/Phasespace step-by-step guide.pdf">Open guide PDF</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Building Map</p>
+          <h2>Find Shepherd Laboratories before you walk in</h2>
+          <p>
+            Use the building address first, then continue to the Drone Lab once you are inside.
+            The embedded map is for quick orientation. If you want satellite or 3D building view,
+            open the Google Maps link directly.
+          </p>
+        </div>
+
+        <div class="location-layout">
+          <article class="detail-card location-card">
+            <span class="chip">Address</span>
+            <h3>Shepherd Laboratories</h3>
+            <address class="address-block">
+              100 Union Street SE<br>
+              Minneapolis, MN 55455
+            </address>
+            <p>
+              The UMN PhaseSpace setup is in the Drone Lab inside Shepherd Laboratories. Reach the
+              building first, then use the room guide and startup flow once you are there.
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href="https://www.google.com/maps/search/?api=1&amp;query=Shepherd+Laboratories%2C+100+Union+Street+SE%2C+Minneapolis%2C+MN+55455">Open Google Maps</a>
+              <a class="button button-secondary" href="https://campusmaps.umn.edu/shepherd-laboratories">Open UMN campus map</a>
+            </div>
+          </article>
+
+          <div class="map-frame-card">
+            <iframe
+              title="Map to Shepherd Laboratories at the University of Minnesota"
+              src="https://www.google.com/maps?q=Shepherd+Laboratories,+100+Union+Street+SE,+Minneapolis,+MN+55455&amp;z=17&amp;output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Key Information</p>
+          <h2>The details most people search for first</h2>
+        </div>
+
+        <div class="metric-strip">
+          <article class="metric-card">
+            <strong>Shepherd Labs</strong>
+            <span>Building where the PhaseSpace setup lives</span>
+          </article>
+          <article class="metric-card">
+            <strong>100 Union Street SE</strong>
+            <span>Minneapolis, MN 55455</span>
+          </article>
+          <article class="metric-card">
+            <strong>Drone Lab</strong>
+            <span>Room you are trying to reach</span>
+          </article>
+          <article class="metric-card">
+            <strong><code>cs-phasespace.cs.umn.edu</code></strong>
+            <span>Configuration Manager URL</span>
+          </article>
+          <article class="metric-card">
+            <strong>Reference guide</strong>
+            <span><a href="../extras/mnri-phasespace/Phasespace step-by-step guide.pdf">Open the PDF walkthrough</a></span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Startup Sequence</p>
+          <h2>The normal order of operations</h2>
+          <p>Follow this order and you avoid doing ROS or tracker work before the room itself is ready.</p>
+        </div>
+
+        <div class="step-grid">
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">1</div>
+              <h3>Find the hub and power it on</h3>
+              <p>The hub is the physical starting point. If it is off, nothing else in the workflow matters.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">2</div>
+              <h3>Join the network</h3>
+              <p>Use the room network path expected by the setup before opening the browser tools.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">3</div>
+              <h3>Open the Configuration Manager</h3>
+              <p>
+                Go to <code>http://cs-phasespace.cs.umn.edu</code>. The current guide lists
+                <code>admin</code> and <code>phasespace</code> as the room credentials.
+              </p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">4</div>
+              <h3>Confirm the hardware appears</h3>
+              <p>Check the LED Devices tab and make sure the microdrivers you need are visible and active.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">What you need physically</span>
+            <h3>Hub, microdrivers, and LED hardware</h3>
+            <p>The room hardware is already installed, but your tracked object still needs the appropriate tracker hardware attached.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">What you need in software</span>
+            <h3>Browser access before ROS</h3>
+            <p>Do not jump straight to ROS commands. The browser-side room setup comes first, especially for confirming devices and profiles.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">What comes next</span>
+            <h3>Tracker setup</h3>
+            <p>Once the room is online and your hardware is visible, the next job is to create or enable the tracker definition.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="note-box">
+          <span class="chip">Ready to move on</span>
+          <h3>You are done with this page when the room is reachable and the hardware is visible.</h3>
+          <p>
+            At that point, the next question is not where the room is. The next question is how to
+            create a usable tracker definition for your object.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Page goal</strong>
+        <p>This page is about location and startup. It gets the room ready before tracker or ROS work begins.</p>
+      </div>
+      <div>
+        <strong>Quick links</strong>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="tracker-setup.html">Tracker Setup</a>
+          <a href="ros-workflow.html">ROS Workflow</a>
+          <a href="calibration.html">Calibration</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

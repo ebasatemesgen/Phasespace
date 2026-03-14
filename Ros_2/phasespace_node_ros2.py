@@ -9,6 +9,7 @@ import select
 import collections
 import re
 import ctypes
+import os
 
 # ros
 # import rospy
@@ -83,6 +84,72 @@ elif sys.version_info.major >= 2:
 def broadcast_rigids(r):
     print(r.name)
     print(r.x)
+
+
+def load_tracker_configs(json_paths):
+    configs = []
+    used_tracker_ids = set()
+    marker_sources = collections.defaultdict(list)
+
+    for json_path in json_paths:
+        with open(json_path, "r") as handle:
+            tracker_dict = json.load(handle)
+
+        trackers = tracker_dict.get("trackers", [])
+        if not trackers:
+            raise ValueError(f"No trackers found in {json_path}")
+
+        for index, tracker in enumerate(trackers):
+            requested_tracker_id = int(tracker["id"])
+            tracker_id = requested_tracker_id
+            if tracker_id in used_tracker_ids:
+                tracker_id = 1
+                while tracker_id in used_tracker_ids:
+                    tracker_id += 1
+                print(
+                    f"[PhaseSpace] Remapping tracker id {requested_tracker_id} from "
+                    f"{os.path.basename(json_path)}[{index}] to {tracker_id} "
+                    "to avoid a collision."
+                )
+
+            used_tracker_ids.add(tracker_id)
+
+            marker_ids = []
+            source_label = f"{os.path.basename(json_path)}[{index}]"
+            for marker in tracker.get("markers", []):
+                marker_id = int(marker["id"])
+                marker_ids.append(marker_id)
+                marker_sources[marker_id].append(source_label)
+
+            configs.append(
+                {
+                    "source": json_path,
+                    "source_label": source_label,
+                    "tracker_id": tracker_id,
+                    "requested_tracker_id": requested_tracker_id,
+                    "name": tracker.get("name") or source_label,
+                    "markers": tracker.get("markers", []),
+                    "marker_ids": marker_ids,
+                }
+            )
+
+    overlapping_marker_ids = {
+        marker_id: sorted(set(sources))
+        for marker_id, sources in marker_sources.items()
+        if len(set(sources)) > 1
+    }
+    if overlapping_marker_ids:
+        print("[PhaseSpace] Warning: overlapping marker ids were found across JSON files.")
+        for marker_id, sources in sorted(overlapping_marker_ids.items()):
+            joined_sources = ", ".join(sources)
+            print(f"[PhaseSpace]   marker {marker_id}: {joined_sources}")
+        print(
+            "[PhaseSpace] If these marker ids refer to different physical trackers, "
+            "re-export the rigid bodies from the same active session profile so the "
+            "server assigns a non-conflicting set."
+        )
+
+    return configs
 
 
 class Type:
@@ -2552,13 +2619,7 @@ class PhaseSpacePublisher(Node):
         self.vel_broadcaster = self.create_publisher(
             TwistStamped, "/phasespace_vel", qos_profile=qos.qos_profile_sensor_data
         )
-        self.r1_pose_0_prev = None
-        self.r1_pose_1_prev = None
-        self.r1_pose_2_prev = None
-
-        self.r2_pose_0_prev = None
-        self.r2_pose_1_prev = None
-        self.r2_pose_2_prev = None
+        self.prev_positions = {}
 
     def publish_transform(self, r):
         current_time = self.get_clock().now().to_msg()
@@ -2583,44 +2644,14 @@ class PhaseSpacePublisher(Node):
         twistStamped.header.frame_id = str(
             r.id
         )  # Discriminate between different rigid bodies.
-        if self.r1_pose_0_prev is None:
-            if r.id == 1:
-                self.r1_pose_0_prev = r.pose[0]
-                self.r1_pose_1_prev = r.pose[1]
-                self.r1_pose_2_prev = r.pose[2]
-            if r.id == 2:
-                self.r2_pose_0_prev = r.pose[0]
-                self.r2_pose_1_prev = r.pose[1]
-                self.r2_pose_2_prev = r.pose[2]
-        if self.r2_pose_0_prev is None:
-            if r.id == 1:
-                self.r1_pose_0_prev = r.pose[0]
-                self.r1_pose_1_prev = r.pose[1]
-                self.r1_pose_2_prev = r.pose[2]
-            if r.id == 2:
-                self.r2_pose_0_prev = r.pose[0]
-                self.r2_pose_1_prev = r.pose[1]
-                self.r2_pose_2_prev = r.pose[2]
-
-        if r.id == 1:
-            twistStamped.twist.linear.x = (r.pose[0] - self.r1_pose_0_prev) * self.freq
-            twistStamped.twist.linear.y = (r.pose[1] - self.r1_pose_1_prev) * self.freq
-            twistStamped.twist.linear.z = (r.pose[2] - self.r1_pose_2_prev) * self.freq
-        elif r.id == 2:
-            twistStamped.twist.linear.x = (r.pose[0] - self.r2_pose_0_prev) * self.freq
-            twistStamped.twist.linear.y = (r.pose[1] - self.r2_pose_1_prev) * self.freq
-            twistStamped.twist.linear.z = (r.pose[2] - self.r2_pose_2_prev) * self.freq
+        prev_position = self.prev_positions.get(r.id)
+        if prev_position is not None:
+            twistStamped.twist.linear.x = (r.pose[0] - prev_position[0]) * self.freq
+            twistStamped.twist.linear.y = (r.pose[1] - prev_position[1]) * self.freq
+            twistStamped.twist.linear.z = (r.pose[2] - prev_position[2]) * self.freq
 
         self.vel_broadcaster.publish(twistStamped)
-
-        if r.id == 1:
-            self.r1_pose_0_prev = r.pose[0]
-            self.r1_pose_1_prev = r.pose[1]
-            self.r1_pose_2_prev = r.pose[2]
-        elif r.id == 2:
-            self.r2_pose_0_prev = r.pose[0]
-            self.r2_pose_1_prev = r.pose[1]
-            self.r2_pose_2_prev = r.pose[2]
+        self.prev_positions[r.id] = (r.pose[0], r.pose[1], r.pose[2])
         self.i += 1
 
 
@@ -2745,6 +2776,14 @@ if __name__ == "__main__":
         nargs="+",
         help="list of json files to load",
     )
+    parser.add_argument(
+        "--use-server-trackers",
+        dest="use_server_trackers",
+        action="store_const",
+        const=True,
+        default=False,
+        help="do not create trackers from JSON; use trackers already active on the PhaseSpace server",
+    )
     args = parser.parse_args()
 
     if not args.scan and not args.device:
@@ -2762,6 +2801,7 @@ if __name__ == "__main__":
             print(s)
 
     if args.device:
+        phasespace_publisher = None
         try:
             # create a context
             OWL = Context()
@@ -2808,28 +2848,34 @@ if __name__ == "__main__":
             )
             # rospy.loginfo("Streaming enabled")
 
-            if args.jsonfile:
-                with open(args.jsonfile, "r") as f:
-                    tracker_dict = json.load(f)
-                tracker_id = tracker_dict["trackers"][0]["id"]
-                OWL.createTracker(tracker_id, "rigid", "default")
-                for marker in tracker_dict["trackers"][0]["markers"]:
+            if args.use_server_trackers:
+                print(
+                    "[PhaseSpace] Using trackers already configured on the server. "
+                    "Skipping JSON-based tracker creation."
+                )
+                tracker_configs = []
+            elif args.jsonfile:
+                tracker_configs = load_tracker_configs([args.jsonfile])
+            elif args.jsonfiles:
+                tracker_configs = load_tracker_configs(args.jsonfiles)
+            else:
+                quit(
+                    "Please provide a --jsonfile or --jsonfiles, "
+                    "or use --use-server-trackers"
+                )
+
+            for tracker_config in tracker_configs:
+                tracker_id = tracker_config["tracker_id"]
+                tracker_name = tracker_config["name"]
+                OWL.createTracker(tracker_id, "rigid", tracker_name)
+                for marker in tracker_config["markers"]:
                     OWL.assignMarker(
                         tracker_id, marker["id"], marker["name"], marker["options"]
                     )
-
-            elif args.jsonfiles:
-                for jsonfile in args.jsonfiles:
-                    with open(jsonfile, "r") as f:
-                        tracker_dict = json.load(f)
-                    tracker_id = tracker_dict["trackers"][0]["id"]
-                    OWL.createTracker(tracker_id, "rigid", "default")
-                    for marker in tracker_dict["trackers"][0]["markers"]:
-                        OWL.assignMarker(
-                            tracker_id, marker["id"], marker["name"], marker["options"]
-                        )
-            else:
-                quit("Please provide a --jsonfile or --jsonfiles")
+                print(
+                    f"[PhaseSpace] Loaded {tracker_config['source_label']} "
+                    f"as tracker id {tracker_id} with markers {tracker_config['marker_ids']}"
+                )
 
             # poll for events + ROS
             while rclpy.ok() and OWL.isOpen() and OWL.property("initialized"):
@@ -2888,7 +2934,8 @@ if __name__ == "__main__":
         finally:
             # end session
             OWL.done()
-            phasespace_publisher.get_logger().info("Session ended")
+            if phasespace_publisher is not None:
+                phasespace_publisher.get_logger().info("Session ended")
             # release connection
             OWL.close()
 

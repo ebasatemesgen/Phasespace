@@ -1,0 +1,49 @@
+{
+  "bag_name": "rosbag2_2026_03_10-17_28_50",
+  "bag_path": "/home/eba/Desktop/ICRA_2027/Phasespace/rosbag2_2026_03_10-17_28_50",
+  "output_dir": "/home/eba/Desktop/ICRA_2027/Phasespace/visualization/outputs/rosbag2_2026_03_10-17_28_50",
+  "topic": "/phasespace",
+  "position_scale": 0.001,
+  "tracker_ids": [
+    "2"
+  ],
+  "tracker_count": 1,
+  "total_distance_m": 26.867402964691216,
+  "max_duration_s": 58.123376163,
+  "global_bounds_m": {
+    "min": {
+      "x": -1.33041357421875,
+      "y": 0.41478173828125003,
+      "z": -2.84293408203125
+    },
+    "max": {
+      "x": 5.516189453125,
+      "y": 0.55859033203125,
+      "z": 0.6726306762695312
+    }
+  },
+  "room_model": {
+    "width_m": 6.391,
+    "length_m": 12.468,
+    "side_recess_m": 0.651,
+    "room_size_x_m": 12.468,
+    "room_size_z_m": 6.391,
+    "center_x_m": 2.0928879394531252,
+    "center_z_m": -1.0851517028808593,
+    "long_axis": "x",
+    "max_height_m": 3.0
+  },
+  "trackers": {
+    "2": {
+      "sample_count": 541,
+      "duration_s": 58.123376163,
+      "distance_m": 26.867402964691216,
+      "mean_speed_mps": 0.4732160022877061,
+      "max_speed_mps": 1.6958362950982369,
+      "min_height_m": 0.41478173828125003,
+      "max_height_m": 0.55859033203125,
+      "x_span_m": 6.84660302734375,
+      "z_span_m": 3.515564758300781
+    }
+  }
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UMN PhaseSpace | Shepherd Labs Guide</title>
+  <meta
+    name="description"
+    content="A first-time-user guide to the PhaseSpace space: what it is, how the room works, how to set up tracking, and how the ROS workflow fits in."
+  >
+  <link rel="stylesheet" href="website/styles.css">
+  <script defer src="website/script.js"></script>
+</head>
+<body data-page="home">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="PhaseSpace UMN Home">
+        <img class="brand-mark" src="website/phasespace-umn-mark.svg" alt="">
+        <span class="brand-name">PhaseSpace UMN</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="index.html" data-page-link="home">Home</a>
+        <a href="website/start-here.html" data-page-link="start">Start Here</a>
+        <a href="website/tracker-setup.html" data-page-link="trackers">Trackers</a>
+        <a href="website/ros-workflow.html" data-page-link="ros">ROS Workflow</a>
+        <a href="website/calibration.html" data-page-link="calibration">Calibration</a>
+        <a class="nav-code" href="https://github.com/ebasatemesgen/Phasespace">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero hero-text-only reveal">
+        <div class="hero-copy">
+          <p class="eyebrow">UMN Robotics • Shepherd Labs • Drone Lab</p>
+          <h1>Welcome to the UMN PhaseSpace space.</h1>
+          <p class="lead">
+            If you are here to track a robot, record motion capture data, or bring a new object
+            into the room, this site is the quickest way to understand where to go, what to turn
+            on, what hardware matters, and how the PhaseSpace workflow turns into usable ROS data.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="website/start-here.html">Find the room</a>
+            <a class="button button-secondary" href="website/tracker-setup.html">Prepare a tracker</a>
+            <a class="button button-secondary" href="website/ros-workflow.html">Run the ROS workflow</a>
+          </div>
+          <ul class="hero-points">
+            <li>This homepage is meant to answer the first question fast: where do I go next?</li>
+            <li>The pages behind it follow the real order of use: room, tracker, ROS, then calibration if needed.</li>
+            <li>The code is still on GitHub; this guide is for using the system well.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">System Overview</p>
+          <h2>What the UMN PhaseSpace setup is doing</h2>
+          <p>
+            The room uses PhaseSpace motion capture to track rigid objects instrumented with active
+            LEDs. Once the tracker geometry is defined, the system estimates a live rigid-body pose
+            and the ROS workflow publishes that motion into topics you can inspect, record, or use
+            inside a robotics pipeline.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="feature-card">
+            <span class="chip">Location</span>
+            <h3>Installed in Shepherd Labs</h3>
+            <p>
+              The system is already mounted in the Drone Lab, so the normal user flow starts with
+              finding the room and getting the installed hardware online.
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="chip">Tracker</span>
+            <h3>LED geometry defines the rigid body</h3>
+            <p>
+              The marker arrangement on the object is what allows PhaseSpace to distinguish one
+              rigid tracker from another.
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="chip">Workflow</span>
+            <h3>JSON is the handoff to ROS</h3>
+            <p>
+              Session profiles and Master Client are how you produce the tracker definition that the
+              ROS node later loads.
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="chip">ROS</span>
+            <h3>Topics carry the motion data</h3>
+            <p>
+              The resulting pose can be published, visualized live, or recorded into bags for later
+              analysis and mapping.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Use This Site</p>
+          <h2>Go straight to the part you need</h2>
+          <p>
+            The homepage is intentionally simple: one guide for location and access, one for tracker
+            setup, one for ROS usage, and one for calibration when the room geometry changes.
+          </p>
+        </div>
+
+        <div class="directory-grid">
+          <a class="directory-card" href="website/start-here.html">
+            <span class="chip">Start Here</span>
+            <h3>Find the room and get the system online</h3>
+            <p>Location, room layout, web access, startup sequence, and where to look first.</p>
+          </a>
+          <a class="directory-card" href="website/tracker-setup.html">
+            <span class="chip">Tracker Setup</span>
+            <h3>Build the rigid tracker correctly</h3>
+            <p>Session profiles, LED grouping, Master Client, and the JSON handoff to ROS.</p>
+          </a>
+          <a class="directory-card" href="website/ros-workflow.html">
+            <span class="chip">ROS Workflow</span>
+            <h3>Publish, view, and record the data</h3>
+            <p>What the node is doing, what command to run, and what topics to expect.</p>
+          </a>
+          <a class="directory-card" href="website/calibration.html">
+            <span class="chip">Calibration</span>
+            <h3>Recalibrate only when the room changed</h3>
+            <p>Use this when cameras moved or the room geometry needs to be reset.</p>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>UMN PhaseSpace at a glance</strong>
+        <p>
+          Start with the room, continue to tracker setup, then move into ROS. That is the path most
+          new users actually need.
+        </p>
+      </div>
+      <div>
+        <strong>Quick links</strong>
+        <div class="footer-links">
+          <a href="website/start-here.html">Start Here</a>
+          <a href="website/tracker-setup.html">Tracker Setup</a>
+          <a href="website/ros-workflow.html">ROS Workflow</a>
+          <a href="website/calibration.html">Calibration</a>
+          <a href="Phasespace step-by-step guide.md">Markdown guide</a>
+          <a href="https://github.com/ebasatemesgen/Phasespace">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

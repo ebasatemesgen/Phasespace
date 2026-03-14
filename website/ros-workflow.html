@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ROS Workflow | UMN PhaseSpace Guide</title>
+  <meta
+    name="description"
+    content="ROS 1 and ROS 2 support for the UMN PhaseSpace workflow, plus visualization and mapping functionality."
+  >
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body data-page="ros">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="PhaseSpace UMN Home">
+        <img class="brand-mark" src="phasespace-umn-mark.svg" alt="">
+        <span class="brand-name">PhaseSpace UMN</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../index.html" data-page-link="home">Home</a>
+        <a href="start-here.html" data-page-link="start">Start Here</a>
+        <a href="tracker-setup.html" data-page-link="trackers">Trackers</a>
+        <a href="ros-workflow.html" data-page-link="ros">ROS Workflow</a>
+        <a href="calibration.html" data-page-link="calibration">Calibration</a>
+        <a class="nav-code" href="https://github.com/ebasatemesgen/Phasespace">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero page-hero-text-only reveal">
+        <div class="page-hero-copy">
+          <p class="eyebrow">ROS Workflow</p>
+          <h1>ROS 1, ROS 2, and what this setup gives you.</h1>
+          <p class="lead">
+            Once the room is running and your tracker JSON exists, the ROS side is straightforward:
+            connect to the PhaseSpace server, load the tracker definition, publish the pose, and
+            use the resulting topics for robotics, logging, replay, and visualization.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="tracker-setup.html">Back to tracker setup</a>
+            <a class="button button-secondary" href="../visualization/README.md">Visualization details</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">ROS Support</p>
+          <h2>What is supported in this project</h2>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">ROS 1</span>
+            <h3>Noetic</h3>
+            <p>
+              The ROS 1 package is intended for ROS Noetic workflows. It publishes tracked objects
+              to <code>/tf</code> and <code>/phasespace/rigids</code>, with marker data available on
+              <code>/phasespace/markers</code>.
+            </p>
+            <a href="../Ros_1/phasespace_ros/phasespace_ros/README.md">Open ROS 1 README</a>
+          </article>
+          <article class="detail-card">
+            <span class="chip">ROS 2</span>
+            <h3>Works with current ROS 2 distros</h3>
+            <p>
+              The ROS 2 workflow is the main path in this guide. The ROS 2 publisher connects to the
+              PhaseSpace server, loads tracker JSON files, and publishes <code>/phasespace</code> and
+              <code>/phasespace_vel</code>. In practice, this is the flexible option for current ROS 2
+              environments such as Foxy, Galactic, Humble, Jazzy, and similar setups.
+            </p>
+            <a href="../Ros_2/phasespace_node_ros2.py">Open ROS 2 node</a>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Visualization</span>
+            <h3>Live view and offline map generation</h3>
+            <p>
+              The visualization tools can subscribe live to the ROS 2 topic or render a recorded bag
+              into 2D and 3D trajectory maps.
+            </p>
+            <a href="../visualization/README.md">Open visualization guide</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">What The Workflow Does</p>
+          <h2>The operational sequence</h2>
+        </div>
+
+        <div class="card-grid">
+          <article class="feature-card">
+            <span class="chip">1</span>
+            <h3>Connects to the server</h3>
+            <p>The node talks to the running PhaseSpace system through the device address you provide.</p>
+          </article>
+          <article class="feature-card">
+            <span class="chip">2</span>
+            <h3>Loads the tracker definition</h3>
+            <p>The JSON file tells the system which rigid body layout to create and stream.</p>
+          </article>
+          <article class="feature-card">
+            <span class="chip">3</span>
+            <h3>Publishes pose topics</h3>
+            <p>The tracked object becomes a live ROS pose stream that other robotics software can subscribe to.</p>
+          </article>
+          <article class="feature-card">
+            <span class="chip">4</span>
+            <h3>Supports replay and analysis</h3>
+            <p>That output can be visualized live, recorded into a bag, and turned into readable maps afterward.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Topics And Frames</p>
+          <h2>What comes out of the ROS 2 workflow</h2>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">Topic</span>
+            <h3><code>/phasespace</code></h3>
+            <p>Published as <code>geometry_msgs/msg/TransformStamped</code> for rigid-body pose data.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Topic</span>
+            <h3><code>/phasespace_vel</code></h3>
+            <p>Published as <code>geometry_msgs/msg/TwistStamped</code> for estimated linear velocity.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Frames</span>
+            <h3><code>map</code> and tracker IDs</h3>
+            <p>The parent frame is <code>map</code>. Each rigid body appears with its own tracker ID as the child frame.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Mapping And Visualization</p>
+          <h2>What happens after you record data</h2>
+          <p>
+            The mapping functionality lives in the visualization tools. After recording a bag, the
+            offline renderer can turn the trajectory into a top-down 2D map or a 3D room-relative
+            view. The same folder also includes a live viewer for the ROS 2 topic, so you can check
+            the motion as it streams.
+          </p>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">Live</span>
+            <h3>Monitor the topic in real time</h3>
+            <p>The live visualizer subscribes to the ROS 2 topic and shows the path in 2D or 3D while the system is running.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Offline</span>
+            <h3>Render 2D and 3D trajectory maps</h3>
+            <p>The bag visualizer reads recorded MCAP data and creates trajectory map outputs you can inspect or share.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Reference</span>
+            <h3>Visualization README</h3>
+            <p>The visualization guide documents the scripts, commands, and output files used for this mapping workflow.</p>
+            <a href="../visualization/README.md">Open visualization README</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="note-box">
+          <span class="chip">Choosing a path</span>
+          <h3>If you are starting fresh, use ROS 2 first.</h3>
+          <p>
+            ROS 1 support is still present for Noetic-based setups, but the clearest and most current
+            route through this project is the ROS 2 workflow plus the visualization tools.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Page goal</strong>
+        <p>This page explains what ROS support exists, what the workflow publishes, and how the recorded data can be visualized afterward.</p>
+      </div>
+      <div>
+        <strong>Quick links</strong>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="start-here.html">Start Here</a>
+          <a href="tracker-setup.html">Tracker Setup</a>
+          <a href="calibration.html">Calibration</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

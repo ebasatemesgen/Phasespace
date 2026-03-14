@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calibration | UMN PhaseSpace Guide</title>
+  <meta
+    name="description"
+    content="When calibration is needed for the UMN PhaseSpace room and how to run calibration and alignment."
+  >
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body data-page="calibration">
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="PhaseSpace UMN Home">
+        <img class="brand-mark" src="phasespace-umn-mark.svg" alt="">
+        <span class="brand-name">PhaseSpace UMN</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
+        <a href="../index.html" data-page-link="home">Home</a>
+        <a href="start-here.html" data-page-link="start">Start Here</a>
+        <a href="tracker-setup.html" data-page-link="trackers">Trackers</a>
+        <a href="ros-workflow.html" data-page-link="ros">ROS Workflow</a>
+        <a href="calibration.html" data-page-link="calibration">Calibration</a>
+        <a class="nav-code" href="https://github.com/ebasatemesgen/Phasespace">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero page-hero-text-only reveal">
+        <div class="page-hero-copy">
+          <p class="eyebrow">Calibration</p>
+          <h1>Calibrate only when the room setup changed.</h1>
+          <p class="lead">
+            Calibration and alignment are not normal daily startup steps. They matter when the room
+            geometry changed, especially if cameras moved or the space was reconfigured. If the room
+            is already tracking correctly, you usually do not need to recalibrate it.
+          </p>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="warning-box">
+          <div class="warning-copy">
+            <span class="chip warn">Use carefully</span>
+            <h3>Do not calibrate just because you are new to the room.</h3>
+            <p>
+              Calibration affects the shared system. Treat it as a corrective procedure, not as the
+              default first step for normal use.
+            </p>
+          </div>
+          <div class="warning-actions">
+            <a class="button button-primary" href="start-here.html">Back to normal setup</a>
+            <a class="button button-secondary" href="../CALIBRATION.md">Open calibration notes</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">When It Is Needed</p>
+          <h2>Common reasons to recalibrate</h2>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">Cameras moved</span>
+            <h3>Tracking geometry changed</h3>
+            <p>If the camera placement changed, the room calibration can no longer be trusted as-is.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Alignment changed</span>
+            <h3>World origin needs to be reset</h3>
+            <p>If the floor origin or axis alignment must change, the alignment phase needs to be run again.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">System health</span>
+            <h3>Tracking quality dropped</h3>
+            <p>If the room no longer tracks consistently after a physical change, recalibration may be necessary.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">What You Need</p>
+          <h2>Hardware and access for calibration</h2>
+        </div>
+
+        <div class="detail-grid">
+          <article class="detail-card">
+            <span class="chip">Hardware</span>
+            <h3>Calibration wand</h3>
+            <p>You need the calibration wand to collect the capture data used by the room calibration tool.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Hardware</span>
+            <h3>Microdriver</h3>
+            <p>The microdriver powers the wand LEDs during calibration and alignment.</p>
+          </article>
+          <article class="detail-card">
+            <span class="chip">Software</span>
+            <h3>Configuration Manager access</h3>
+            <p>The calibration and alignment tools live inside the Web Clients area of the Configuration Manager.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section accent-surface reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Calibration Sequence</p>
+          <h2>The room calibration steps</h2>
+        </div>
+
+        <div class="step-grid">
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">1</div>
+              <h3>Connect the wand hardware</h3>
+              <p>Attach the microdriver to the calibration wand and power it on so the LEDs activate.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">2</div>
+              <h3>Open the calibration client</h3>
+              <p>Go to the Configuration Manager, open Web Clients, then enter the calibration tool and connect.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">3</div>
+              <h3>Capture wand motion through the room</h3>
+              <p>Wave the wand through the volume until the calibration client shows good enough camera coverage.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">4</div>
+              <h3>Calibrate and save</h3>
+              <p>Finish the calibration inside the client and save it before disconnecting.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reveal">
+        <div class="section-intro">
+          <p class="eyebrow">Alignment</p>
+          <h2>Set the world origin after calibration</h2>
+        </div>
+
+        <div class="step-grid">
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">1</div>
+              <h3>Place the wand at the intended origin</h3>
+              <p>Use the room’s intended floor origin as the first reference point.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">2</div>
+              <h3>Record origin, +x, and +z</h3>
+              <p>Those three snapshots define the aligned world frame used by the system afterward.</p>
+            </div>
+          </article>
+
+          <article class="step-card">
+            <div class="step-copy">
+              <div class="step-index">3</div>
+              <h3>Save only if the alignment is correct</h3>
+              <p>If the result looks wrong, reset and repeat instead of saving a questionable alignment.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Page goal</strong>
+        <p>This page explains when calibration is necessary and how to run it without turning normal room use into a calibration task.</p>
+      </div>
+      <div>
+        <strong>Quick links</strong>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="start-here.html">Start Here</a>
+          <a href="tracker-setup.html">Tracker Setup</a>
+          <a href="ros-workflow.html">ROS Workflow</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
