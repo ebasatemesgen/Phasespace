@@ -6,7 +6,76 @@ It includes:
 
 - `phasespace_bag_visualizer.py`: reads a rosbag2 MCAP directly and renders polished 2D and 3D maps.
 - `phasespace_live_visualizer_ros2.py`: subscribes to a live ROS 2 `/phasespace` topic and shows the path in 2D or 3D.
+- `phasespace_live_visualizer_web.py`: serves a low-latency browser view that renders at display rate and can ingest either ROS 2 `/phasespace` data or a direct PhaseSpace stream.
 - `phasespace_visualization_common.py`: shared bag parsing, room geometry, and plotting helpers.
+
+## Fast live visualization
+
+For real-time use, prefer the browser visualizer instead of the Matplotlib live viewer.
+
+Why:
+
+- The browser path keeps rendering on `requestAnimationFrame`, so the canvas can stay smooth at `60 FPS`.
+- The Python bridge only forwards fresh samples and keeps tracker trails bounded.
+- Direct mode can bypass ROS 2 entirely and pull PhaseSpace data over `UDP`, which reduces latency.
+
+### ROS 2 input
+
+Terminal 1, publish `/phasespace` at a higher rate than the old `10 Hz` example:
+
+```bash
+source /opt/ros/humble/setup.bash
+/usr/bin/python3 Ros_2/phasespace_node_ros2.py \
+  --device=cs-phasespace.cs.umn.edu \
+  --stream=udp \
+  --freq=120 \
+  --jsonfiles 106A-ebasa_tracker.json
+```
+
+Terminal 2, launch the browser visualizer:
+
+```bash
+source /opt/ros/humble/setup.bash
+/usr/bin/python3 visualization/phasespace_live_visualizer_web.py \
+  --source ros2 \
+  --topic /phasespace
+```
+
+Then open:
+
+- `http://127.0.0.1:8765/`
+
+### Direct PhaseSpace input, no ROS 2
+
+```bash
+/usr/bin/python3 visualization/phasespace_live_visualizer_web.py \
+  --source direct \
+  --device cs-phasespace.cs.umn.edu \
+  --stream udp \
+  --freq 120 \
+  --jsonfiles 106A-ebasa_tracker.json
+```
+
+If the tracker definitions are already active on the PhaseSpace server, use:
+
+```bash
+/usr/bin/python3 visualization/phasespace_live_visualizer_web.py \
+  --source direct \
+  --device cs-phasespace.cs.umn.edu \
+  --stream udp \
+  --freq 120 \
+  --use-server-trackers
+```
+
+Useful flags:
+
+- `--port <port>`
+- `--max-trail-points <count>`
+- `--hide-room`
+- `--room-anchor trajectory_center|center|corner`
+- `--room-origin-x-m <value>`
+- `--room-origin-z-m <value>`
+- `--room-long-axis auto|x|z`
 
 ## Room model
 
@@ -70,6 +139,12 @@ source /opt/ros/humble/setup.bash
 ```
 
 Then publish or replay `/phasespace` data from another terminal.
+
+Important note:
+
+- `phasespace_live_visualizer_ros2.py` uses Matplotlib and is still useful for quick inspection.
+- It is not the recommended path when you want low-latency live viewing.
+- Use `phasespace_live_visualizer_web.py` for the fast path.
 
 ## Notes on this bag
 

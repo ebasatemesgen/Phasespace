@@ -13,13 +13,22 @@ import os
 
 # ros
 # import rospy
-import rclpy
-
-# import tf2_ros
-from geometry_msgs.msg import TransformStamped, TwistStamped
 import json
-from rclpy.node import Node
-from rclpy import qos
+
+try:
+    import rclpy
+    from geometry_msgs.msg import TransformStamped, TwistStamped
+    from rclpy.node import Node
+    from rclpy import qos
+
+    ROS2_AVAILABLE = True
+except ImportError:
+    rclpy = None
+    TransformStamped = None
+    TwistStamped = None
+    Node = object
+    qos = None
+    ROS2_AVAILABLE = False
 
 """
 libowl2 API Python Implementation
@@ -2607,9 +2616,13 @@ class ProtocolUdp(Protocol):
 
 class PhaseSpacePublisher(Node):
     def __init__(self, name: str, freq):
+        if not ROS2_AVAILABLE:
+            raise RuntimeError(
+                "ROS 2 Python packages are required to run phasespace_node_ros2.py"
+            )
         super().__init__(name)
         self.i = 0
-        self.freq = float(freq)
+        self.freq = float(freq) if freq else 0.0
         self.get_logger().info("Streaming enabled")
         # Create a TransformBroadcaster object
         # self.broadcaster = tf2_ros.TransformBroadcaster(self)
@@ -2622,7 +2635,9 @@ class PhaseSpacePublisher(Node):
         self.prev_positions = {}
 
     def publish_transform(self, r):
-        current_time = self.get_clock().now().to_msg()
+        now = self.get_clock().now()
+        current_time = now.to_msg()
+        current_time_ns = now.nanoseconds
         transformStamped = TransformStamped()
         transformStamped.header.stamp = current_time
         transformStamped.header.frame_id = "map"
@@ -2646,12 +2661,14 @@ class PhaseSpacePublisher(Node):
         )  # Discriminate between different rigid bodies.
         prev_position = self.prev_positions.get(r.id)
         if prev_position is not None:
-            twistStamped.twist.linear.x = (r.pose[0] - prev_position[0]) * self.freq
-            twistStamped.twist.linear.y = (r.pose[1] - prev_position[1]) * self.freq
-            twistStamped.twist.linear.z = (r.pose[2] - prev_position[2]) * self.freq
+            dt = (current_time_ns - prev_position[3]) / 1e9
+            if dt > 0.0:
+                twistStamped.twist.linear.x = (r.pose[0] - prev_position[0]) / dt
+                twistStamped.twist.linear.y = (r.pose[1] - prev_position[1]) / dt
+                twistStamped.twist.linear.z = (r.pose[2] - prev_position[2]) / dt
 
         self.vel_broadcaster.publish(twistStamped)
-        self.prev_positions[r.id] = (r.pose[0], r.pose[1], r.pose[2])
+        self.prev_positions[r.id] = (r.pose[0], r.pose[1], r.pose[2], current_time_ns)
         self.i += 1
 
 
@@ -2659,7 +2676,6 @@ if __name__ == "__main__":
     #
     # Example Program
     #
-    rclpy.init()
     # Adding ros functionality
     # rospy.init_node("phasespace_python_node", anonymous=True)
     # rospy.Rate(10)  # 10 Hz
@@ -2708,6 +2724,14 @@ if __name__ == "__main__":
         default=5000000,
         type=int,
         help="maximum microseconds to wait",
+    )
+    parser.add_argument(
+        "--stream",
+        dest="stream",
+        action="store",
+        choices=("tcp", "udp"),
+        default="udp",
+        help="transport used by the PhaseSpace server stream",
     )
     parser.add_argument(
         "--peaks",
@@ -2801,6 +2825,11 @@ if __name__ == "__main__":
             print(s)
 
     if args.device:
+        if not ROS2_AVAILABLE:
+            raise ImportError(
+                "ROS 2 Python packages are required to run phasespace_node_ros2.py"
+            )
+        rclpy.init()
         phasespace_publisher = None
         try:
             # create a context
@@ -2842,7 +2871,7 @@ if __name__ == "__main__":
             advanced_options = args.peaks or args.planes or args.inputs or args.hub
 
             # enable streaming
-            OWL.streaming(1)
+            OWL.streaming(2 if args.stream == "udp" else 1)
             phasespace_publisher = PhaseSpacePublisher(
                 name="phasespace_python_node", freq=args.freq
             )

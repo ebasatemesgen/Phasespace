@@ -1,0 +1,285 @@
+:root {
+  --bg: #07141a;
+  --bg-alt: #0d2028;
+  --panel: rgba(8, 19, 24, 0.86);
+  --panel-strong: rgba(11, 28, 35, 0.94);
+  --line: rgba(154, 190, 190, 0.22);
+  --text: #edf5f3;
+  --muted: #9fb7b0;
+  --accent: #7be0c7;
+  --accent-2: #ffbf69;
+  --danger: #ff8f8f;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(123, 224, 199, 0.12), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(255, 191, 105, 0.08), transparent 24%),
+    linear-gradient(160deg, #041017, #0a1f27 48%, #09171d);
+  color: var(--text);
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 20px;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.stage-shell,
+.side-panel {
+  min-width: 0;
+}
+
+.stage-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stage-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow,
+.panel-kicker,
+.overlay-label {
+  margin: 0 0 6px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1;
+}
+
+.connection-pill {
+  border: 1px solid rgba(123, 224, 199, 0.3);
+  background: rgba(123, 224, 199, 0.12);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.canvas-panel {
+  position: relative;
+  flex: 1;
+  min-height: 72vh;
+  background:
+    linear-gradient(180deg, rgba(17, 42, 52, 0.88), rgba(7, 20, 26, 0.96)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+#live-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay-card {
+  position: absolute;
+  top: 18px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 15, 19, 0.74);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+.overlay-card-left {
+  left: 18px;
+}
+
+.overlay-card-right {
+  right: 18px;
+  text-align: right;
+}
+
+.overlay-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-section {
+  padding: 18px;
+  border-radius: 22px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric-card {
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--panel-strong);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.metric-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.15rem;
+}
+
+.tracker-list {
+  display: grid;
+  gap: 10px;
+}
+
+.topic-list,
+.diagnostic-list {
+  display: grid;
+  gap: 10px;
+}
+
+.topic-row,
+.diagnostic-card {
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--panel-strong);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.topic-row strong,
+.diagnostic-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.92rem;
+}
+
+.topic-row code,
+.diagnostic-card p {
+  margin: 0;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.tracker-card {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--panel-strong);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tracker-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  margin-top: 4px;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+}
+
+.tracker-card h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.tracker-card p {
+  margin: 0;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.diagnostic-card p + p {
+  margin-top: 5px;
+}
+
+.empty-state,
+.panel-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .canvas-panel {
+    min-height: 58vh;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .stage-header {
+    flex-direction: column;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .overlay-card {
+    top: auto;
+    bottom: 14px;
+  }
+
+  .overlay-card-left {
+    left: 14px;
+  }
+
+  .overlay-card-right {
+    right: 14px;
+  }
+}

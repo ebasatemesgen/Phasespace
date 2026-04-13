@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PhaseSpace Fast Live View</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <main class="stage-shell">
+      <div class="stage-header">
+        <div>
+          <p class="eyebrow">Real-Time Canvas View</p>
+          <h1>PhaseSpace Fast Live Visualizer</h1>
+        </div>
+        <div class="connection-pill" id="connection-pill">Connecting</div>
+      </div>
+      <section class="canvas-panel">
+        <canvas id="live-canvas"></canvas>
+        <div class="overlay-card overlay-card-left">
+          <div class="overlay-label">View</div>
+          <div class="overlay-value" id="view-summary">Waiting for samples</div>
+        </div>
+        <div class="overlay-card overlay-card-right">
+          <div class="overlay-label">Latency</div>
+          <div class="overlay-value" id="latency-summary">No data yet</div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="side-panel">
+      <section class="panel-section">
+        <p class="panel-kicker">Stream</p>
+        <div class="metric-grid">
+          <article class="metric-card">
+            <span>Status</span>
+            <strong id="status-text">Starting</strong>
+          </article>
+          <article class="metric-card">
+            <span>Source</span>
+            <strong id="source-text">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Pose Rate</span>
+            <strong id="pose-hz-text">0 Hz</strong>
+          </article>
+          <article class="metric-card">
+            <span>Velocity Rate</span>
+            <strong id="velocity-hz-text">0 Hz</strong>
+          </article>
+          <article class="metric-card">
+            <span>Pose Frames</span>
+            <strong id="pose-count-text">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Velocity Msgs</span>
+            <strong id="velocity-count-text">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Rosout</span>
+            <strong id="rosout-count-text">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Param Events</span>
+            <strong id="param-count-text">0</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="panel-kicker">Topics</p>
+        <div class="topic-list" id="topic-list">
+          <div class="empty-state">Waiting for topic configuration.</div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="panel-kicker">Trackers</p>
+        <div class="tracker-list" id="tracker-list">
+          <div class="empty-state">No trackers received yet.</div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="panel-kicker">Rosout</p>
+        <div class="diagnostic-list" id="rosout-list">
+          <div class="empty-state">No rosout messages yet.</div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <p class="panel-kicker">Parameter Events</p>
+        <div class="diagnostic-list" id="parameter-list">
+          <div class="empty-state">No parameter events yet.</div>
+        </div>
+      </section>
+
+      <section class="panel-section panel-note">
+        <p class="panel-kicker">Use</p>
+        <p>
+          Keep this page open while the Python bridge is running. The canvas is optimized for
+          `/phasespace` and `/phasespace_vel`; `/rosout` and `/parameter_events` are shown as light
+          diagnostics so the motion view stays responsive.
+        </p>
+      </section>
+    </aside>
+  </div>
+</body>
+</html>
